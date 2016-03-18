@@ -166,7 +166,7 @@ public class rbt {
             }
         }
         return tree;
-    }gi
+    }
 
     static rbt right_remove_fixup(ref ctx, rbt tree)
     {
