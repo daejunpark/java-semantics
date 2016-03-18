@@ -64,7 +64,8 @@ module RBT-PATTERN
       ctree(?PL)(TL)
       ctree(?PR)(TR)
     ...</objectStore>
-    ensures -2147483648 <=Int I andBool I <=Int 2147483647
+    ensures true
+    andBool -2147483648 <=Int I andBool I <=Int 2147483647
     andBool -2147483648 <=Int C andBool C <=Int 2147483647
     [pattern]
   rule <objectStore>... ctree(null)(cleaf) => .Bag ...</objectStore>
