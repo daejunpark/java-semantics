@@ -1,6 +1,6 @@
 require "java-verification.k"
 
-module RBT-INSERT-SPEC
+module RBT-DELETE-SPEC
 imports JAVA-VERIFICATION
 
 rule
