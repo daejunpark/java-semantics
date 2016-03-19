@@ -156,8 +156,40 @@ rule
 <objectStore>... (htree(TP)(T:Tree) => htree(?TP1)(?T1:Tree)) (.Bag => ?_:Bag) ...</objectStore>
 
 requires avl(T) andBool V >=Int -2147483648 andBool V <=Int 2147483647
+  andBool V inIntSet tree_keys(T)
 ensures avl(?T1) andBool tree_keys(?T1) ==K tree_keys(T) -IntSet {V}
   andBool tree_height(T) -Int 1 <=Int tree_height(?T1)
   andBool tree_height(?T1) <=Int tree_height(T)
+
+
+
+rule
+<threads>
+<thread>
+  <k>
+	(class String2Id(".avl")).String2Id("delete"):Id(V:Int::int, (TP:RawRefVal)::(class String2Id(".avl")))
+        =>
+        ?TP1:RawRefVal::(class String2Id(".avl"))
+  ...</k>
+<holds> .Map </holds>
+...
+</thread>
+</threads>
+
+<classes> CLASSES:Bag </classes>
+<NumOfClassesToUnfold> 0 </NumOfClassesToUnfold>
+<program> .K </program>
+<globalPhase> ExecutionPhase </globalPhase>
+<store>... .Map => ?_:Map ...</store>
+<busy> .Set </busy>
+<nextLoc> I:Int => ?_:Int </nextLoc>
+<objectStore>... (htree(TP)(T:Tree) => htree(?TP1)(?T1:Tree)) ...</objectStore>
+
+requires avl(T) andBool V >=Int -2147483648 andBool V <=Int 2147483647
+  andBool (notBool (V inIntSet tree_keys(T)))
+ensures avl(?T1) andBool tree_keys(?T1) ==K tree_keys(T) -IntSet {V}
+  andBool tree_height(T) -Int 1 <=Int tree_height(?T1)
+  andBool tree_height(?T1) <=Int tree_height(T)
+
 endmodule
 
