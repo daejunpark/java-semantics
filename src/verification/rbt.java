@@ -13,12 +13,13 @@ public class rbt {
     }
 
     public static void main(String[] args) {
-        rbt node1 = new rbt (2);
-        rbt node2 = new rbt (1);
-        rbt node3 = new rbt (3);
-        node1.left = node2;
-        node1.right = node3;
-        insert_aux(5, node1);
+        rbt t = null;
+        t = insert(1,t);
+        t = insert(2,t);
+        t = insert(3,t);
+        t = insert(4,t);
+        t = insert(5,t);
+        t = delete(1,t);
     }
 
     static int color(rbt t)
@@ -131,20 +132,20 @@ public class rbt {
 
 // Remove
 
-    static rbt left_remove_fixup(ref ctx, rbt tree)
+    static rbt left_delete_fixup(ref ctx, rbt tree)
     {
         if (color(tree.right) != 1 /* RED */) { // case 2
             tree = left_rotate(tree);
             tree.color = 1 /* BLACK */;
             tree.left.color = 0 /* RED */;
-            tree.left = left_remove_fixup(ctx, tree.left);
+            tree.left = left_delete_fixup(ctx, tree.left);
             ctx.fixed = 1;
         }
         else {
             if (color(tree.right.left) == 1 /* BLACK */ &&
                     color(tree.right.right) == 1 /* BLACK */) { // case 3 & 4
                 if (color(tree) == 1 /* BLACK */) { // case 3
-                    ctx.fixed = 0; // {left,right}_remove_fixup will be called again later
+                    ctx.fixed = 0; // {left,right}_delete_fixup will be called again later
                 } else { // case 4
                     ctx.fixed = 1;
                 }
@@ -168,20 +169,20 @@ public class rbt {
         return tree;
     }
 
-    static rbt right_remove_fixup(ref ctx, rbt tree)
+    static rbt right_delete_fixup(ref ctx, rbt tree)
     {
         if (color(tree.left) != 1 /* RED */) {
             tree = right_rotate(tree);
             tree.color = 1 /* BLACK */;
             tree.right.color = 0 /* RED */;
-            tree.right = right_remove_fixup(ctx, tree.right);
+            tree.right = right_delete_fixup(ctx, tree.right);
             ctx.fixed = 1;
         }
         else {
             if (color(tree.left.right) == 1 /* BLACK */ &&
                     color(tree.left.left) == 1 /* BLACK */) {
                 if (color(tree) == 1 /* BLACK */) { // case 3
-                    ctx.fixed = 0; // {left,right}_remove_fixup will be called again later
+                    ctx.fixed = 0; // {left,right}_delete_fixup will be called again later
                 } else { // case 4
                     ctx.fixed = 1;
                 }
@@ -204,7 +205,7 @@ public class rbt {
         return tree;
     }
 
-    static rbt remove_aux(ref ctx, int value, rbt tree)
+    static rbt delete_aux(ref ctx, int value, rbt tree)
     {
         if (tree == null) {
             ctx.fixed = 1;
@@ -218,7 +219,7 @@ public class rbt {
                 }
                 else {
                     if (color(tree) == 1 /* BLACK */) {
-                        ctx.fixed = 0; // {left,right}_remove_fixup will be called again later
+                        ctx.fixed = 0; // {left,right}_delete_fixup will be called again later
                     } else { // case 4
                         ctx.fixed = 1;
                     }
@@ -232,7 +233,7 @@ public class rbt {
                 }
                 else {
                     if (color(tree) == 1 /* BLACK */) {
-                        ctx.fixed = 0; // {left,right}_remove_fixup will be called again later
+                        ctx.fixed = 0; // {left,right}_delete_fixup will be called again later
                     } else { // case 4
                         ctx.fixed = 1;
                     }
@@ -241,32 +242,32 @@ public class rbt {
             }
             else {
                 tree.value = find_min(tree.right);
-                tree.right = remove_aux(ctx, tree.value, tree.right);
+                tree.right = delete_aux(ctx, tree.value, tree.right);
                 if (ctx.fixed != 1) {
-                    tree = right_remove_fixup(ctx, tree);
+                    tree = right_delete_fixup(ctx, tree);
                 }
             }
         }
         else if (value < tree.value) {
-            tree.left = remove_aux(ctx, value, tree.left);
+            tree.left = delete_aux(ctx, value, tree.left);
             if (ctx.fixed != 1) {
-                tree = left_remove_fixup(ctx, tree);
+                tree = left_delete_fixup(ctx, tree);
             }
         }
         else {
-            tree.right = remove_aux(ctx, value, tree.right);
+            tree.right = delete_aux(ctx, value, tree.right);
             if (ctx.fixed != 1) {
-                tree = right_remove_fixup(ctx, tree);
+                tree = right_delete_fixup(ctx, tree);
             }
         }
         return tree;
     }
 
-    static rbt remove(int value, rbt tree)
+    static rbt delete(int value, rbt tree)
     {
         ref ctx = new ref();
         ctx.fixed = 0;
-        tree = remove_aux(ctx, value, tree);
+        tree = delete_aux(ctx, value, tree);
         return tree;
     }
 }
