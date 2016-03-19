@@ -23,7 +23,6 @@ rule
   </threads>
   <objectStore>... ctree(TP)(T:CTree) ...</objectStore>
 ensures ctree_color(T) ==K 1 orBool ctree_color(T) ==K 0
-  [trusted]
 
 rule
   <classes> CLASSES:Bag </classes>
@@ -47,7 +46,6 @@ rule
 requires TP =/=K null andBool rbt(T)
 ensures (?M inIntSet ctree_keys(T)) andBool ({ ?M } <=IntSet ctree_keys(T))
   andBool ?M >=Int -2147483648 andBool ?M <=Int 2147483647
-  [trusted]
 
 rule
   <classes> CLASSES:Bag </classes>
@@ -142,7 +140,6 @@ ensures rbt(cnode(?I2,?C2,?L2,?R2))
           )
   andBool -2147483648 <=Int ?I2 andBool ?I2 <=Int 2147483647
   andBool -2147483648 <=Int ?C2 andBool ?C2 <=Int 2147483647
-  [trusted]
 
 rule
   <classes> CLASSES:Bag </classes>
@@ -237,7 +234,6 @@ ensures rbt(cnode(?I2,?C2,?L2,?R2))
           )
   andBool -2147483648 <=Int ?I2 andBool ?I2 <=Int 2147483647
   andBool -2147483648 <=Int ?C2 andBool ?C2 <=Int 2147483647
-  [trusted]
 
 rule
   <classes> CLASSES:Bag </classes>
@@ -320,7 +316,6 @@ ensures rbt(?T2)
           orBool
             ?F2 ==K 0
           )
-  [trusted]
 
 rule
   <classes> CLASSES:Bag </classes>
