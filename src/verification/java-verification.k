@@ -1,6 +1,7 @@
 require "../exec/java-exec.k"
 require "tree_pattern.k"
 require "rbt_pattern.k"
+require "treap_pattern.k"
 require "int_set.k"
 require "list_pattern.k"
 require "int_list.k"
@@ -10,5 +11,6 @@ module JAVA-VERIFICATION
   imports TREE-PATTERN
   imports LIST-PATTERN
   imports RBT-PATTERN
+  imports TREAP-PATTERN
 
 endmodule
