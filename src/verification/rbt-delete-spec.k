@@ -292,6 +292,89 @@ requires rbt(T1)
           orBool
             F1 ==K 0
           )
+  andBool V inIntSet ctree_keys(T1)
+ensures rbt(?T2)
+  andBool ctree_keys(?T2) ==K (ctree_keys(T1) -IntSet { V })
+  andBool (
+            ctree_color(?T2) ==K 1
+          orBool
+            ctree_color(?T2) ==K ctree_color(T1)
+          )
+  andBool (
+            (
+              ?F2 ==K 1
+            andBool ctree_height(?T2) ==Int ctree_height(T1)
+            )
+          orBool
+            (
+              ?F2 =/=K 1
+            andBool ctree_height(?T2) ==Int ctree_height(T1) -Int 1
+            andBool ctree_color(?T2) ==K 1
+            )
+          )
+  andBool (
+            ?F2 ==K 1
+          orBool
+            ?F2 ==K 0
+          )
+
+rule
+  <classes> CLASSES:Bag </classes>
+  <NumOfClassesToUnfold> 0 </NumOfClassesToUnfold>
+  <program> .K </program>
+  <globalPhase> ExecutionPhase </globalPhase>
+  <store>... .Map => ?_:Map ...</store>
+  <busy> .Set </busy>
+  <nextLoc> _:Int => ?_:Int </nextLoc>
+  <threads>
+    <thread>
+      <k>
+        (class String2Id(".rbt")).String2Id("delete_aux"):Id(
+            objectRef(FP:Int, class String2Id(".ref"))::(class String2Id(".ref")),
+            V:Int::int,
+            (TP1:RawRefVal)::(class String2Id(".rbt")))
+      =>
+        (?TP2:RawRefVal)::(class String2Id(".rbt"))
+      ...</k>
+      <holds> .Map </holds>
+  ...</thread>
+  </threads>
+  <objectStore>...
+    <object>
+      <objectId> FP </objectId>
+      <objectType> class String2Id(".ref") </objectType>
+      <layer>
+        <layerClass> class String2Id(".ref") </layerClass>
+        <layerEnv>
+        (
+          String2Id("fixed") |->  F1:Int :: int
+        =>
+          String2Id("fixed") |-> ?F2:Int :: int
+        )
+        </layerEnv>
+        <layerEnclosingObject> noValue </layerEnclosingObject>
+      </layer>
+      <layer>
+        <layerClass> class String2Id("java.lang.Object") </layerClass>
+        <layerEnv> .Map </layerEnv>
+        <layerEnclosingObject> noValue </layerEnclosingObject>
+      </layer>
+    </object>
+  (
+    ctree( TP1)( T1:CTree)
+  =>
+    ctree(?TP2)(?T2:CTree)
+  )
+  ...</objectStore>
+requires rbt(T1)
+  andBool ctree_height(T1) <=Int 2147483647
+  andBool -2147483648 <=Int V andBool V <=Int 2147483647
+  andBool (
+            F1 ==K 1
+          orBool
+            F1 ==K 0
+          )
+  andBool (notBool (V inIntSet ctree_keys(T1)))
 ensures rbt(?T2)
   andBool ctree_keys(?T2) ==K (ctree_keys(T1) -IntSet { V })
   andBool (
@@ -346,6 +429,42 @@ rule
 requires rbt(T1)
   andBool ctree_height(T1) <=Int 2147483647
   andBool -2147483648 <=Int V andBool V <=Int 2147483647
+  andBool V inIntSet ctree_keys(T1)
+ensures rbt(?T2)
+  andBool ctree_keys(?T2) ==K (ctree_keys(T1) -IntSet { V })
+  andBool ctree_height(T1) -Int 1 <=Int ctree_height(?T2)
+  andBool ctree_height(?T2) <=Int ctree_height(T1)
+
+rule
+  <classes> CLASSES:Bag </classes>
+  <NumOfClassesToUnfold> 0 </NumOfClassesToUnfold>
+  <program> .K </program>
+  <globalPhase> ExecutionPhase </globalPhase>
+  <store>... .Map => ?_:Map ...</store>
+  <busy> .Set </busy>
+  <nextLoc> _:Int => ?_:Int </nextLoc>
+  <threads>
+    <thread>
+      <k>
+	    (class String2Id(".rbt")).String2Id("delete"):Id(V:Int::int, (TP1:RawRefVal)::(class String2Id(".rbt")))
+      =>
+        ?TP2:RawRefVal::(class String2Id(".rbt"))
+      ...</k>
+      <holds> .Map </holds>
+  ...</thread>
+  </threads>
+  <objectStore>...
+  (
+    ctree( TP1)( T1:CTree)
+  =>
+    ctree(?TP2)(?T2:CTree)
+  )
+    (.Bag => ?_:Bag)
+  ...</objectStore>
+requires rbt(T1)
+  andBool ctree_height(T1) <=Int 2147483647
+  andBool -2147483648 <=Int V andBool V <=Int 2147483647
+  andBool (notBool (V inIntSet ctree_keys(T1)))
 ensures rbt(?T2)
   andBool ctree_keys(?T2) ==K (ctree_keys(T1) -IntSet { V })
   andBool ctree_height(T1) -Int 1 <=Int ctree_height(?T2)
